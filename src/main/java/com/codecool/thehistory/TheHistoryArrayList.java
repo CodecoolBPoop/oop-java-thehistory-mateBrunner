@@ -1,9 +1,6 @@
 package com.codecool.thehistory;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public class TheHistoryArrayList implements TheHistory {
     /**
@@ -13,33 +10,58 @@ public class TheHistoryArrayList implements TheHistory {
 
     @Override
     public void add(String text) {
-        //TODO: check the TheHistory interface for more information
+        wordsArrayList.addAll(Arrays.asList(text.split("\\s")));
     }
 
     @Override
     public void removeWord(String wordToBeRemoved) {
-        //TODO: check the TheHistory interface for more information
+        wordsArrayList.removeIf(wordToBeRemoved::equals);
     }
 
     @Override
     public int size() {
-        //TODO: check the TheHistory interface for more information
-        return 0;
+        return wordsArrayList.size();
     }
 
     @Override
     public void clear() {
-        //TODO: check the TheHistory interface for more information
+        wordsArrayList.clear();
     }
 
     @Override
     public void replaceOneWord(String from, String to) {
-        //TODO: check the TheHistory interface for more information
+        Collections.replaceAll(wordsArrayList, from, to);
     }
 
     @Override
     public void replaceMoreWords(String[] fromWords, String[] toWords) {
-        //TODO: check the TheHistory interface for more information
+        int correct;
+        List<String> newArray = new ArrayList<String>();
+        for (int i=0; i < wordsArrayList.size(); i++) {
+            if (wordsArrayList.size() - i < fromWords.length) {
+                for (int j=i; j < wordsArrayList.size(); j++) {
+                    newArray.add(wordsArrayList.get(j));
+                }
+                break;
+            }
+            correct = 0;
+            for (int j=0; j < fromWords.length; j++) {
+                if (wordsArrayList.get(i+j).equals(fromWords[j])) {
+                    correct++;
+                } else {
+                    break;
+                }
+            }
+            if (correct == fromWords.length) {
+                for (int j=0; j < toWords.length; j++) {
+                    newArray.add(toWords[j]);
+                }
+                i = i + fromWords.length - 1;
+            } else {
+                newArray.add(wordsArrayList.get(i));
+            }
+        }
+        wordsArrayList = newArray;
     }
 
     @Override
